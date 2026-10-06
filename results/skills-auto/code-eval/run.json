@@ -1,0 +1,79 @@
+{
+  "task": "code-eval",
+  "condition": "skills-auto",
+  "role": "eval",
+  "error": null,
+  "timestamp": "2026-10-06T16:07:23.546258+00:00",
+  "skills_sha256": "130309bce4cb934485439d7580d3e96b1505c4eb994bbd51ada90edb3b8519c0",
+  "seconds": 48.1,
+  "tokens": {
+    "input": 205378,
+    "output": 3043,
+    "total": 208421
+  },
+  "tool_calls": 24,
+  "subagent_calls": 0,
+  "skills_read": 3,
+  "skills_modified": false,
+  "final_message": "## Summary\n\nI fixed all test failures in the `bookings` package by correcting three functions to match their docstring specifications:\n\n**Changes made:**\n\n1. **`workspace/bookings/timeutil.py`** - Fixed `parse_duration()`:\n   - The original regex only supported \"XhYm\" format (both hours and minutes required)\n   - Implemented support for all documented formats: \"Xh\", \"XhYm\", \"Xm\", \"X:Y\", and bare numbers\n   - Now correctly handles \"2h\" → 120, \"45m\" → 45, \"1:30\" → 90, etc.\n\n2. **`workspace/bookings/billing.py`** - Fixed `billable_blocks()`:\n   - Changed from `round()` to `math.ceil()` to always round UP as documented\n   - Added validation: raises `ValueError` for negative minute values as specified\n   - Now correctly returns 2 for 20 minutes (was incorrectly returning 1)\n\n3. **`workspace/bookings/schedule.py`** - Fixed `add_slot()`:\n   - Replaced mutable default argument `slots=[]` with `slots=None` to fix the shared state bug\n   - Now returns a new list each time, preventing state leakage between calls\n   - Correctly returns [\"a\"] then [\"b\"] on separate calls instead of sharing state\n\nAll 3 tests now pass, and all functions comply with their docstring specifications.",
+  "score": 0.6363636363636364,
+  "passed": 7,
+  "total": 11,
+  "checks": [
+    {
+      "name": "visible_suite_passes",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "tests_not_modified",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "parse_duration_all_formats",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "other_caller_fixed",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "billable_blocks_round_up",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "add_slot_no_shared_state",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "negative_minutes_rejected",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "rule_type_hints",
+      "passed": false,
+      "detail": ""
+    },
+    {
+      "name": "rule_regression_tests",
+      "passed": false,
+      "detail": ""
+    },
+    {
+      "name": "rule_changelog",
+      "passed": false,
+      "detail": ""
+    },
+    {
+      "name": "rule_version_bump",
+      "passed": false,
+      "detail": ""
+    }
+  ]
+}
