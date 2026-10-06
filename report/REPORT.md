@@ -2,9 +2,9 @@
 
 ## 1. Thông tin nhóm và cấu hình
 
-| Họ tên | Mã sinh viên | Phần đóng góp |
-|---|---|---|
-| Vũ Văn Diện | 2A202602418 | Cài đặt harness, chạy thí nghiệm, phân tích và viết báo cáo |
+| Họ tên      | Mã sinh viên | Phần đóng góp                                               |
+| ----------- | ------------ | ----------------------------------------------------------- |
+| Vũ Văn Điền | 2A202602418  | Cài đặt harness, chạy thí nghiệm, phân tích và viết báo cáo |
 
 - Mô hình: `anthropic:claude-haiku-4-5-20251001` qua cổng Anthropic-compatible; `LAB_TEMPERATURE=0`; `recursion_limit=60` cho các lượt học ban đầu và 40 cho các lượt chính thức còn lại. Riêng `subagents/logs-eval` dùng lại 60 sau khi trần 40 gây `GraphRecursionError`.
 - Deep Agents `0.7.21`; Python 3.12 trong `python:3.12-slim`; chạy bằng Docker trên máy chủ Windows.
@@ -27,17 +27,17 @@
 
 Sau khi loại bỏ lỗi CRLF của môi trường Windows, baseline đạt toàn bộ **18/18 check kỹ thuật** và thất bại **9/9 check quy ước**. Vì vậy mọi lỗi thật còn lại thuộc nhóm E.
 
-| Tác vụ | Check thất bại | Nhóm lỗi | Bằng chứng từ `detail` |
-|---|---|---|---|
-| code-learn | `rule_type_hints` | E | “RULE: every public function ... has type annotations ...” |
-| code-learn | `rule_regression_tests` | E | “RULE: add tests/test_regressions.py ... at least 3” |
-| code-learn | `rule_changelog` | E | “RULE: record each fix in CHANGELOG.md under ... Unreleased” |
-| data-learn | `rule_money_in_cents` | E | “RULE: money values in answer.json are integer cents” |
-| data-learn | `rule_meta_block` | E | “RULE: answer.json has an object meta ...” |
-| data-learn | `rule_clean_csv` | E | “RULE: write workspace/clean.csv ...” |
-| logs-learn | `rule_service_names` | E | “RULE: service names ... lower-case with '-' replaced by '_'” |
-| logs-learn | `rule_sorted_errors` | E | “RULE: errors is sorted by service, then by timestamp_utc” |
-| logs-learn | `rule_schema_header` | E | “RULE: top-level object has schema_version 2 and generated_by ...” |
+| Tác vụ     | Check thất bại          | Nhóm lỗi | Bằng chứng từ `detail`                                             |
+| ---------- | ----------------------- | -------- | ------------------------------------------------------------------ |
+| code-learn | `rule_type_hints`       | E        | “RULE: every public function ... has type annotations ...”         |
+| code-learn | `rule_regression_tests` | E        | “RULE: add tests/test_regressions.py ... at least 3”               |
+| code-learn | `rule_changelog`        | E        | “RULE: record each fix in CHANGELOG.md under ... Unreleased”       |
+| data-learn | `rule_money_in_cents`   | E        | “RULE: money values in answer.json are integer cents”              |
+| data-learn | `rule_meta_block`       | E        | “RULE: answer.json has an object meta ...”                         |
+| data-learn | `rule_clean_csv`        | E        | “RULE: write workspace/clean.csv ...”                              |
+| logs-learn | `rule_service_names`    | E        | “RULE: service names ... lower-case with '-' replaced by '_'”      |
+| logs-learn | `rule_sorted_errors`    | E        | “RULE: errors is sorted by service, then by timestamp_utc”         |
+| logs-learn | `rule_schema_header`    | E        | “RULE: top-level object has schema_version 2 and generated_by ...” |
 
 Nhóm E chiếm 9/9 lỗi thật. Trace cho thấy agent đọc đề, docstring/dữ liệu, sửa nguyên nhân kỹ thuật và kiểm thử lại; bằng chứng phủ định cho nhóm A–D là 18/18 check kỹ thuật đã đạt. Skill có thể phòng ngừa một phần nhóm E bằng checklist bắt buộc đọc quy ước, kiểm kê artifact và xác thực schema, nhưng không thể biết trước một quy ước hoàn toàn mới nếu đề và feedback không nêu nó.
 
@@ -52,28 +52,28 @@ Nhóm E chiếm 9/9 lỗi thật. Trace cho thấy agent đọc đề, docstring
 
 - Curator chạy một lần, tạo ba skill; không skill nào bị xóa và không nội dung nào được sửa tay. Cả ba qua `validate_skill`, không chứa marker eval.
 
-| Skill | Tổng quát hay riêng cho tác vụ học? | Đúng hay sai | Độ dài, `description` và `skills_read` ở Phần 3.4 |
-|---|---|---|---|
-| `validate-output-schema` | Tổng quát cho JSON/CSV/file có schema; ví dụ là kiểu dữ liệu và format, không chứa đáp án task | Đúng: yêu cầu liệt kê schema, viết kiểm tra, sửa nguyên nhân và kiểm tra lại | 13 dòng; description kích hoạt sau khi tạo structured output; được đọc ở data/logs và cả code-eval |
-| `protect-original-files` | Tổng quát cho task cấm sửa file gốc | Đúng: lập allow-list, kiểm tra diff/checksum và khôi phục file bảo vệ nếu cần | 12 dòng; description nêu đúng điều kiện “task forbids modifying”; được đọc ở code-learn |
-| `audit-required-artifacts` | Tổng quát cho task có tài liệu/test/artifact bắt buộc; các tên quy ước Acme được GUIDE cho phép | Đúng: kiểm kê sự tồn tại, vị trí, format, số lượng và chạy validation | 12 dòng; description kích hoạt sau implementation; được đọc ở code-learn và logs-learn |
+| Skill                      | Tổng quát hay riêng cho tác vụ học?                                                             | Đúng hay sai                                                                  | Độ dài, `description` và `skills_read` ở Phần 3.4                                                  |
+| -------------------------- | ----------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| `validate-output-schema`   | Tổng quát cho JSON/CSV/file có schema; ví dụ là kiểu dữ liệu và format, không chứa đáp án task  | Đúng: yêu cầu liệt kê schema, viết kiểm tra, sửa nguyên nhân và kiểm tra lại  | 13 dòng; description kích hoạt sau khi tạo structured output; được đọc ở data/logs và cả code-eval |
+| `protect-original-files`   | Tổng quát cho task cấm sửa file gốc                                                             | Đúng: lập allow-list, kiểm tra diff/checksum và khôi phục file bảo vệ nếu cần | 12 dòng; description nêu đúng điều kiện “task forbids modifying”; được đọc ở code-learn            |
+| `audit-required-artifacts` | Tổng quát cho task có tài liệu/test/artifact bắt buộc; các tên quy ước Acme được GUIDE cho phép | Đúng: kiểm kê sự tồn tại, vị trí, format, số lượng và chạy validation         | 12 dòng; description kích hoạt sau implementation; được đọc ở code-learn và logs-learn             |
 
 Trong lượt development đã sao lưu tại `results/skills-auto-dev/`, `skills_read` lần lượt là code = 2, data = 1, logs = 2. Ở sáu lượt chính thức, mọi run đều đọc ít nhất một skill, `skills_modified=false`, và cùng hash `130309bce4cb...`. Dù agent đọc skill, cả 21 house rule (9 learn + 12 eval) vẫn thất bại: đọc skill chưa đồng nghĩa agent biết hoặc thực thi được những quy ước không xuất hiện trong đề.
 
 ## 7. Kết quả so sánh (Phần 4.3, 4.4)
 
-| Task | baseline | subagents | skills-auto |
-|---|---|---|---|
-| code-learn | 7/10 | 7/10 | 7/10 |
-| data-learn | 5/8 | 5/8 | 5/8 |
-| logs-learn | 6/9 | 6/9 | 6/9 |
-| code-eval | 7/11 | 6/11 | 7/11 |
-| data-eval | 3/9 | 5/9 | 5/9 |
-| logs-eval | 3/10 | 6/10 | 6/10 |
-| **Mean score - learning tasks** | 0.66 | 0.66 | 0.66 |
-| **Mean score - evaluation tasks** | 0.42 | 0.57 | 0.60 |
-| **Mean tokens per run** | 155,227 | 215,265 | 192,054 |
-| **Runs that read a skill** | 0/6 | 0/6 | 6/6 |
+| Task                              | baseline | subagents | skills-auto |
+| --------------------------------- | -------- | --------- | ----------- |
+| code-learn                        | 7/10     | 7/10      | 7/10        |
+| data-learn                        | 5/8      | 5/8       | 5/8         |
+| logs-learn                        | 6/9      | 6/9       | 6/9         |
+| code-eval                         | 7/11     | 6/11      | 7/11        |
+| data-eval                         | 3/9      | 5/9       | 5/9         |
+| logs-eval                         | 3/10     | 6/10      | 6/10        |
+| **Mean score - learning tasks**   | 0.66     | 0.66      | 0.66        |
+| **Mean score - evaluation tasks** | 0.42     | 0.57      | 0.60        |
+| **Mean tokens per run**           | 155,227  | 215,265   | 192,054     |
+| **Runs that read a skill**        | 0/6      | 0/6       | 6/6         |
 
 Kết quả `check_breakdown.py`:
 
