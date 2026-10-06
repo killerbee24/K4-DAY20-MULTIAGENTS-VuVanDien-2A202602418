@@ -5,6 +5,7 @@ description = "Lab: agent harness, self-evolving agents and multi-agent with Dee
 requires-python = ">=3.11"
 dependencies = [
     "deepagents==0.7.21",
+    "langchain-anthropic>=1.0",
     "langchain-openai>=1.0",
     "langchain-deepseek>=1.1",
     "python-dotenv>=1.0",
